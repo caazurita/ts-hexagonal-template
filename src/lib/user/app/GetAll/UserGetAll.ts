@@ -5,7 +5,7 @@ import { UserDTO } from "../UserDto";
 export class UserGetAll {
   constructor(
     private repository: UserRepository,
-    private roleRepository: RoleRepository
+    // private roleRepository: RoleRepository
   ) {}
 
   async run(): Promise<UserDTO[]> {

@@ -5,34 +5,39 @@ export class Password {
   private hashedPassword: string;
 
   constructor(
-    password: string,
-    private readonly passwordEncryptor: PasswordEncryptor
+    password: string
+    // private readonly passwordEncryptor: PasswordEncryptor
   ) {
     this.password = password;
     this.ensurePasswordIsValid(this.password);
 
-    this.hashedPassword = "";
-    this.passwordEncryptor = passwordEncryptor;
+    // this.hashedPassword = "";
+    // this.passwordEncryptor = passwordEncryptor;
   }
 
   getValue(): string {
     return this.hashedPassword;
   }
 
-  async encrypt(): Promise<void> {
-    this.hashedPassword = await this.passwordEncryptor.encrypt(this.password);
-  }
-
-  async compare(password: string): Promise<boolean> {
-    const isValid = await this.passwordEncryptor.compare(
-      password,
-      this.hashedPassword
-    );
-    return isValid;
-  }
   private ensurePasswordIsValid(password: string): void {
     if (password.length < 5) {
       throw new Error("Password must be at least 5 characters long.");
     }
+  }
+
+  async encrypt(passwordEncryptor: PasswordEncryptor): Promise<Password> {
+    this.hashedPassword = await passwordEncryptor.encrypt(this.password);
+    return this;
+  }
+
+  async compare(
+    passwordEncryptor: PasswordEncryptor,
+    password: string
+  ): Promise<boolean> {
+    const isValid = await passwordEncryptor.compare(
+      password,
+      this.hashedPassword
+    );
+    return isValid;
   }
 }

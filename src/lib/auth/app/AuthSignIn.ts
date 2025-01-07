@@ -6,11 +6,11 @@ import { AuthInvalidCredentialError } from "./AuthInvalidCredentialError";
 
 export class AuthSignIn {
   constructor(
-    private repository: UserRepository,
+    private userRepository: UserRepository,
     private jwtTokenManager: JwtTokenManager
   ) {}
   async run(email: string, password: string): Promise<AuthDto> {
-    const user = await this.repository.getOneByEmail(new Email(email));
+    const user = await this.userRepository.getOneByEmail(new Email(email));
     if (!user) throw new AuthInvalidCredentialError("Invalid credentials.");
 
     const isValid = await user.password.compare(password);

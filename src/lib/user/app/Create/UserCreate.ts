@@ -25,14 +25,14 @@ export class UserCreate {
       throw new UserEmailDuplicated("Email already exists");
     }
 
-    const pass = new Password(password, this.passwordEncryptor);
-    await pass.encrypt();
+    const pass = new Password(password);
+    const encrypted = await pass.encrypt(this.passwordEncryptor);
 
     const user = new User(
       new UserId(id),
       new Name(name),
       new Email(email),
-      pass,
+      encrypted,
       new Date(),
       new Date()
     );
